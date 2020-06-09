@@ -1,26 +1,22 @@
 #!/bin/bash
 
-# user-defined variables
-orig_English="orig_English.txt"
-orig_Russian="orig_Russian.txt"
+function exit_with_error {
+    local local_errorcode
+    local_errorcode=("$@")
+    echo "------------------------------"
+    echo ${local_errorcode[*]}
+    echo "Exit..."
+    exit 0
+}
 
-# internal script variables
-temp_FileNotFound=0
-
-for temp_var in $orig_English $orig_Russian
-    do
-        if [ -f $temp_var ]
-            then
-                echo "FOUND:     " $temp_var
-            else
-                temp_FileNotFound=1
-                echo "NOT FOUND: " $temp_var
-        fi
-    done
-
-if [ $temp_FileNotFound -eq 1 ]
+if ! [ -n "$1" ]
     then
-        echo "-----------"
-        echo "Exit code: file(s) not found"
-        exit 0
+        error_code=("Please" "add" "a" "filename")
+        exit_with_error ${error_code[*]}
+fi
+
+if ! [ -f $1 ]
+    then
+        error_code=("NOT" "FOUND:" $1)
+        exit_with_error ${error_code[*]}
 fi
