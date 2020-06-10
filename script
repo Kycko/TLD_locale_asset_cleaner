@@ -37,7 +37,9 @@ for string in $(cat $1)
 
         if [ $result == 1 ]
         then
-            echo $string
+            afterCUT=$(echo $string | cut -d'"' -f2)
+            filename="new_$afterCUT.csv"
+            echo "Key,$afterCUT,NOTES,," > $(echo $filename)
             break
         fi
 
