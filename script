@@ -9,14 +9,36 @@ function exit_with_error {
     exit 0
 }
 
-if ! [ -n "$1" ]
+function find_string_in_string {                #1) substring 2) string
+    if grep -q $1 <<< $2
     then
-        error_code="Please add a filename"
-        exit_with_error ${error_code[*]}
+        echo 1
+    else
+        echo 0
+    fi
+}
+
+if ! [ -n "$1" ]
+then
+    error_code="Please add a filename"
+    exit_with_error ${error_code[*]}
 fi
 
 if ! [ -f $1 ]
-    then
-        error_code="NOT FOUND: $1"
-        exit_with_error ${error_code[*]}
+then
+    error_code="NOT FOUND: $1"
+    exit_with_error ${error_code[*]}
 fi
+
+IFS=$'\n'
+for string in $(cat $1)
+    do
+        result=$(find_string_in_string "string m_Name" $string)
+
+        if [ $result == 1 ]
+        then
+            echo $string
+            break
+        fi
+
+    done
