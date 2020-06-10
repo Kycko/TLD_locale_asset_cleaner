@@ -38,8 +38,11 @@ for string in $(cat $1)
         if [ $result == 1 ]
         then
             afterCUT=$(echo $string | cut -d'"' -f2)
-            filename="new_$afterCUT.csv"
-            echo "Key,$afterCUT,NOTES,," > $(echo $filename)
+            filename="orig_$afterCUT formatted.csv"
+            echo 'Key,'$afterCUT',NOTES,'$filename',
+,,,,,,,,,,,,,,,,,,,
+UseCyrillicFont,No,"Пометка для переводчиков: поставьте на позиции (между разделителями) вашего языка ""Yes"", если используете кириллицу",Yes,
+,,,,,,,,,,,,,,,,,,,' > $(echo $filename)
             break
         fi
 
