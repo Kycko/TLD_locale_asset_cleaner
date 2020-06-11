@@ -51,8 +51,25 @@ UseCyrillicFont,No,"Пометка для переводчиков: постав
     fi
 done
 
+# check total amount of KEYS
+string_counter=0
+
+for string in $(cat $1); do
+    result=$(find_string_in_string "int size" $string)
+
+    if [ $result == 1 ]; then
+        if [ $string_counter == 0 ]; then
+            let string_counter++
+        else
+            string_counter=$(echo $string | sed s/[^0-9]//g)
+            echo "KEYS total....................."$string_counter
+            break
+        fi
+    fi
+done
+
 # making KEYS + ingame strings
-echo "Making KEYS + ingame strings..."
+echo -ne "Making KEYS + ingame strings...\r"
 string_counter=0
 
 for string in $(cat $1); do
@@ -61,10 +78,14 @@ for string in $(cat $1); do
         echo -n $afterCUT',' >> $(echo $filename)
     elif [ $(find_string_in_string "string data" $string) == 1 ]; then
         if [ $string_counter != 0 ]; then
-            echo "Making KEYS + ingame strings: "$string_counter
+            echo -ne "Making KEYS + ingame strings..."$string_counter"\r"
             afterCUT=$(cut_kavichki $string)
             echo '"'$afterCUT'",,,' >> $(echo $filename)
         fi
         let string_counter++
     fi
 done
+
+echo -e "\n------------------------------"
+echo "DONE!"
+echo "------------------------------"
