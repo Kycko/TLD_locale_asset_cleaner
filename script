@@ -9,13 +9,17 @@ function exit_with_error {
     exit 0
 }
 
-function find_string_in_string {                #1) substring 2) string
+function find_string_in_string {                # 1) substring 2) string
     if grep -q $1 <<< $2
     then
         echo 1
     else
         echo 0
     fi
+}
+
+function cut_kavichki {                         # 1) string to cut
+    echo $1 | cut -d'"' -f2
 }
 
 if ! [ -n "$1" ]
@@ -37,7 +41,7 @@ for string in $(cat $1)
 
         if [ $result == 1 ]
         then
-            afterCUT=$(echo $string | cut -d'"' -f2)
+            afterCUT=$(cut_kavichki $string)
             filename="orig_$afterCUT formatted.csv"
             echo 'Key,'$afterCUT',NOTES,'$filename',
 ,,,,,,,,,,,,,,,,,,,
