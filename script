@@ -35,19 +35,21 @@ then
 fi
 
 IFS=$'\n'
-for string in $(cat $1)
-    do
-        result=$(find_string_in_string "string m_Name" $string)
 
-        if [ $result == 1 ]
-        then
-            afterCUT=$(cut_kavichki $string)
-            filename="orig_$afterCUT formatted.csv"
-            echo 'Key,'$afterCUT',NOTES,'$filename',
+# making the first few mandatory lines
+for string in $(cat $1)
+do
+    result=$(find_string_in_string "string m_Name" $string)
+
+    if [ $result == 1 ]
+    then
+        afterCUT=$(cut_kavichki $string)
+        filename="orig_$afterCUT formatted.csv"
+        echo 'Key,'$afterCUT',NOTES,'$filename',
 ,,,,,,,,,,,,,,,,,,,
 UseCyrillicFont,No,"Пометка для переводчиков: поставьте на позиции (между разделителями) вашего языка ""Yes"", если используете кириллицу",Yes,
 ,,,,,,,,,,,,,,,,,,,' > $(echo $filename)
-            break
-        fi
+        break
+    fi
 
-    done
+done
