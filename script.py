@@ -3,6 +3,7 @@ import sys
 
 # functions
 def FUNC_exit_with_error(error_code):
+    print()
     print("------------------------------")
     print(error_code)
     print("Exit...")
@@ -39,7 +40,6 @@ def FUNC_find_substring_return_before(substring, string):
 # MAIN PROGRAM
 print("------------------------------")
 print("Prepare...")
-print()
 
 if len(sys.argv) == 1:
     FUNC_exit_with_error("PLEASE ADD A FILENAME")
