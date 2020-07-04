@@ -46,7 +46,7 @@ if len(sys.argv) == 1:
 if not OSpath.isfile(sys.argv[1]):
     FUNC_exit_with_error("NOT FOUND: "+sys.argv[1])
 DATA_original = FUNC_read_file(sys.argv[1])
-temp = FUNC_find_substring_return_before(".", sys.argv[1])
+temp = FUNC_find_substring_return_before(".txt", sys.argv[1])
 NEW_filename = temp+" formatted.csv"
 
 # making the first few mandatory lines
