@@ -12,6 +12,10 @@ def FUNC_read_file(filename):
     data = file.readlines()
     file.close()
     return data
+def FUNC_write_to_the_file(data, filename):
+    file = open(filename, 'w', encoding='utf-8')
+    file.writelines(data)
+    file.close()
 def FUNC_find_substring(substring, string):
     index = string.find(substring)
     if index == -1:
@@ -51,8 +55,14 @@ print("Making the first few mandatory lines...")
 for string in DATA_original:
     tempTEXT = FUNC_find_substring_return_after("string m_Name = ", string)
     if tempTEXT:
-        DATA_new = ['Key,' + tempTEXT[1:-1] + ',NOTES,' + NEW_filename + ',\n',
+        DATA_new = ['Key,' + tempTEXT[1:-2] + ',NOTES,' + NEW_filename + ',\n',
                     ',,,,,,,,,,,,,,,,,,,\n',
                     'UseCyrillicFont,No,"Пометка для переводчиков: поставьте на позиции (между разделителями) вашего языка «Yes», если используете кириллицу",Yes,\n',
                     ',,,,,,,,,,,,,,,,,,,\n']
         break
+
+# finalizing
+FUNC_write_to_the_file(DATA_new, NEW_filename)
+print("\n------------------------------")
+print("DONE!")
+print("------------------------------")
