@@ -72,8 +72,37 @@ for string in DATA_original:
         else:
             temp_counter = True
 
+# making KEYS + ingame strings
+print("Making KEYS + ingame strings...", end="")
+
+string_counter = 0
+key_is_opened = False
+
+for string in DATA_original:
+    if key_is_opened:
+        if string[0] == '\t':
+            DATA_new[-1] += ',,,\n'
+            key_is_opened = False
+        else:
+            DATA_new[-1] += '\n'
+            DATA_new.append(string[:-1])
+    else:
+        tempTEXT = FUNC_find_substring_return_after("string m_Key = ", string, 1)
+        if tempTEXT:
+            string_counter += 1
+            print("\rMaking KEYS + ingame strings..."+str(string_counter), end="")
+            DATA_new.append(tempTEXT[1:-1]+',')
+        elif string_counter:
+            tempTEXT = FUNC_find_substring_return_after("string data = ", string, 1)
+            if tempTEXT:
+                DATA_new[-1] += tempTEXT
+                key_is_opened = True
+
 # finalizing
+print()
+print("Writing to the file...")
 FUNC_write_to_the_file(DATA_new, NEW_filename)
-print("\n------------------------------")
+print()
+print("------------------------------")
 print("DONE!")
 print("------------------------------")
