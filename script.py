@@ -46,57 +46,58 @@ if len(sys.argv) == 1:
 if not OSpath.isfile(sys.argv[1]):
     FUNC_exit_with_error("NOT FOUND: "+sys.argv[1])
 DATA_original = FUNC_read_file(sys.argv[1])
-temp = FUNC_find_substring_return_before(".txt", sys.argv[1])
+temp = FUNC_find_substring_return_before(".json", sys.argv[1])
 NEW_filename = temp+" formatted.csv"
 
 # making the first few mandatory lines
 print("Making the first few mandatory lines...")
 
 for string in DATA_original:
-    tempTEXT = FUNC_find_substring_return_after("string m_Name = ", string, 1)
+    tempTEXT = FUNC_find_substring_return_after('"m_Name": ', string, 1)
     if tempTEXT:
-        DATA_new = ['Key,' + tempTEXT[1:-1] + ',NOTES,' + NEW_filename + ',\n',
+        DATA_new = ['Key,' + tempTEXT[1:-2] + ',NOTES,' + NEW_filename + ',\n',
                     ',,,,,,,,,,,,,,,,,,,\n',
                     'UseCyrillicFont,No,"Пометка для переводчиков: поставьте на позиции (между разделителями) вашего языка «Yes», если используете кириллицу",Yes,\n',
                     ',,,,,,,,,,,,,,,,,,,\n']
         break
 
 # check total amount of KEYS
-temp_counter = False
-for string in DATA_original:
-    tempTEXT = FUNC_find_substring_return_after("int size = ", string, 1)
-    if tempTEXT:
-        if temp_counter:
-            print("KEYS total....................."+tempTEXT)
-            break
-        else:
-            temp_counter = True
+temp = (len(DATA_original)-20) // 6                 # first 12 strings + 8 ending strings = -20 strings; 6 strings per one key
+print("KEYS total....................."+str(temp))
 
 # making KEYS + ingame strings
 print("Making KEYS + ingame strings...", end="")
 
 string_counter = 0
 key_is_opened = False
+skip_next_line = False
 
 for string in DATA_original:
     if key_is_opened:
-        if string[0] == '\t':
-            DATA_new[-1] += ',,,\n'
-            key_is_opened = False
+        if skip_next_line:
+            skip_next_line = False
         else:
-            DATA_new[-1] += '\n'
-            DATA_new.append(string[:-1])
+            key_is_opened = False
+            temp = string[8:-1].replace('\\"', '"')
+            temp = temp.split('\\n')
+
+            for i in range(len(temp)):
+                if temp[i] and temp[i][-1] == ' ':
+                    temp[i] = temp[i][:-1]
+
+            DATA_new[-1] += temp[0]
+            for i in range(1, len(temp)):
+                DATA_new[-1] += '\n'
+                DATA_new.append(temp[i])
+            DATA_new[-1] += ',,,\n'
     else:
-        tempTEXT = FUNC_find_substring_return_after("string m_Key = ", string, 1)
+        tempTEXT = FUNC_find_substring_return_after('"m_Key": ', string, 1)
         if tempTEXT:
             string_counter += 1
             print("\rMaking KEYS + ingame strings..."+str(string_counter), end="")
-            DATA_new.append(tempTEXT[1:-1]+',')
-        elif string_counter:
-            tempTEXT = FUNC_find_substring_return_after("string data = ", string, 1)
-            if tempTEXT:
-                DATA_new[-1] += tempTEXT
-                key_is_opened = True
+            DATA_new.append(tempTEXT[1:-2]+',')
+            key_is_opened = True
+            skip_next_line = True
 
 # finalizing
 print()
