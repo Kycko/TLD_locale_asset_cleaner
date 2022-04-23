@@ -79,6 +79,7 @@ for string in DATA_original:
         else:
             key_is_opened = False
             temp = string[8:-1].replace('\\"', '"')
+            temp = temp.replace('\\r', '')
             temp = temp.split('\\n')
 
             for i in range(len(temp)):
