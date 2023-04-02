@@ -62,7 +62,7 @@ for string in DATA_original:
         break
 
 # check total amount of KEYS
-temp = (len(DATA_original)-20) // 6                 # first 12 strings + 8 ending strings = -20 strings; 6 strings per one key
+temp = (len(DATA_original)-20) // 9                 # first 12 strings + 8 ending strings = -20 strings; 9 strings per one key
 print("KEYS total....................."+str(temp))
 
 # making KEYS + ingame strings
