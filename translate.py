@@ -73,9 +73,9 @@ for string in dataOrig:
     if skipNextLine: skipNextLine = False
     else:
       keyOpened = False
-      temp      = string[8:-1].replace('\\"','"')
-      temp      = temp        .replace('\\r','')
-      temp      = temp          .split('\\n')
+      temp      = string[:-1].strip().replace('\\"','"')
+      temp      = temp               .replace('\\r','')
+      temp      = temp                 .split('\\n')
 
       for i in range(len(temp)):
         if temp[i] and temp[i][-1] == ' ': temp[i] = temp[i][:-1]
