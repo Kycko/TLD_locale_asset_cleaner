@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from   os import path as OSpath
 import sys
 

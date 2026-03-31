@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from   os  import path as OSpath
 from   sys import argv
 from   sys import exit as sysExit
